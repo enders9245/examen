@@ -76,7 +76,7 @@ pipeline {
                     sh '''
                         cd reservasback
                         sonar-scanner \
-                        -Dsonar.projectKey=TestWebcapa \
+                        -Dsonar.projectKey=Capachica \
                         -Dsonar.sources=app \
                         -Dsonar.tests=tests \
                         -Dsonar.php.coverage.reportPaths=storage/coverage.xml \
