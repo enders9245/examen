@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('Sonarqube') // Reemplaza con el ID exacto de tu token en Jenkins Credentials
+        SONAR_TOKEN = credentials('Sonarqube')
     }
 
     stages {
@@ -37,7 +37,6 @@ pipeline {
                           cp .env.example .env
                         fi
 
-                        # Usar entorno de testing para las pruebas
                         if [ ! -f .env.testing ]; then
                           cp .env .env.testing
                         fi
@@ -54,7 +53,7 @@ pipeline {
                     sh '''
                         cd reservasback
                         php artisan config:clear
-                        php artisan migrate:fresh --seed || echo "Migración falló, puede que ya esté aplicada"
+                        php artisan migrate:fresh --seed || echo "Migración falló"
                     '''
                 }
             }
@@ -90,7 +89,7 @@ pipeline {
 
         stage('Quality Gate') {
             steps {
-                sleep(time: 10, unit: 'SECONDS') // tiempo para que Sonar procese
+                sleep(time: 10, unit: 'SECONDS')
                 timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
@@ -110,6 +109,6 @@ pipeline {
         }
         failure {
             echo '❌ Error en alguna etapa del pipeline.'
-        }
-    }
+        }
+    }
 }
